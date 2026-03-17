@@ -15,7 +15,7 @@ def main():
     parser.add_argument(
         "--path",
         type=str,
-        default="BestEstimates",
+        default=os.path.join("AggregatedData", "1.00", "BestEstimates.csv"),
         help="path to file with generated trust data",
     )
 

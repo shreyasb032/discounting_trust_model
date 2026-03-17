@@ -40,7 +40,7 @@ def main():
     participant_ids = data["Participant ID"].unique().tolist()
 
     for p_id in participant_ids:
-        filename = os.path.join(directory, f"Partcipant{p_id:03}.xlsx")
+        filename = os.path.join(directory, f"Participant{p_id:03}.xlsx")
 
         df = data.loc[data["Participant ID"] == p_id]
         all_sheets_data = []

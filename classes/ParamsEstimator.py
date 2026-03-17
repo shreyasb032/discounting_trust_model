@@ -43,6 +43,9 @@ class ParamsEstimatorBFGS:
         alpha = alpha0
         beta = beta0
         for i, (t, p) in enumerate(zip(trust_history, perf_history)):
+            if t < 0:
+                continue
+
             df = _df.get_value(i)
             alpha = alpha0 + df * (alpha - alpha0) + p * ws
             beta = beta0 + df * (beta - beta0) + (1 - p) * wf
@@ -123,7 +126,23 @@ class ParamsEstimatorBFGS:
         self.performance_history.append(performance)
         self.trust_feedback.append(trust)
 
-        x0 = np.ones((4,), dtype=float)
+        if (
+            trust_params.get("alpha0") is not None
+            and trust_params.get("beta0") is not None
+            and trust_params.get("ws") is not None
+            and trust_params.get("wf") is not None
+        ):
+            x0 = np.array(
+                [
+                    trust_params["alpha0"],
+                    trust_params["beta0"],
+                    trust_params["ws"],
+                    trust_params["wf"],
+                ],
+                dtype=float,
+            )
+        else:
+            x0 = np.ones((4,), dtype=float)
 
         def fun(x):
             return self.neg_log_likelihood(
